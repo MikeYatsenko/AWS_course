@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: 'AWS CloudFormation Sample Template EC2'
+Parameters:
+  KeyName:
+    Description: EC2 Instatance
+    Type: AWS::EC2::KeyPair::KeyName
+
+  InstanceType:
+    Description: EC2 Instance Type
+    Type: String
+    Default: t2.micro
+    AllowedValues: [t2.micro,t2.small,t2.medium]
+    ConstraintDescription: must be a valid EC2 instance type.
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'LatestAmiId'
+      InstanceType: !Ref 'InstanceType'
+      SecurityGroups:
+        - !Ref 'SSHSecurityGroup'
+        - !Ref 'HTTPSecurityGroup'
+
+  SSHSecurityGroup:
+    Description: SSH access
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+  HTTPSecurityGroup:
+    Description: HTTP access
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  PublicIP:
+    Description: IP of the newly created EC2 instance
+    Value: !GetAtt [PublicIp]

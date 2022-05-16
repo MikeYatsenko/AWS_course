@@ -22,33 +22,3 @@ resource "aws_iam_role" "sqs-sns-role" {
 }
   EOF
 }
-
-resource "aws_iam_role_policy" "s3_" {
-  name = "s3"
-  role = aws_iam_role.sqs-sns-role.id
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-     {
-        "Action": [
-          "s3:GetObject"
-        ],
-        "Effect": "Allow",
-        "Resource": "*"
-      },
-      {
-        "Effect": "Allow",
-        "Action": "sqs:*",
-        "Resource": "*"
-      },
-      {
-        "Effect": "Allow",
-        "Action": "sns:*",
-        "Resource": "*"
-      }
-    ]
-}
-  EOF
-}

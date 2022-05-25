@@ -1,6 +1,6 @@
-resource "aws_iam_role_policy" "s3" {
-  name = "s3"
-  role = aws_iam_role.ec2_s3.id
+resource "aws_iam_role_policy" "s3_1" {
+  name = "s3_1"
+  role = aws_iam_role.ec2_s3_iam_instance_1.id
 
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -16,13 +16,13 @@ resource "aws_iam_role_policy" "s3" {
   })
 }
 
-resource "aws_iam_instance_profile" "ec2" {
-  name = "ec2"
-  role = aws_iam_role.ec2_s3.name
+resource "aws_iam_instance_profile" "ec2_13" {
+  name = "ec2_13"
+  role = aws_iam_role.ec2_s3_iam_instance_1.id
 }
 
-resource "aws_iam_role" "ec2_s3" {
-  name = "ec2_s3"
+resource "aws_iam_role" "ec2_s3_iam_instance_1" {
+  name = "ec2_s3_iam_instance_1"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

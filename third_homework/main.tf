@@ -1,13 +1,9 @@
 provider "aws" {
-  access_key = "AKIA2OB26KJBVD6VKJIZ"
-  secret_key = "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"
-  region = "eu-west-1"
-
+  region     = "us-east-1"
 }
-
 # Create a Security Group for an EC2 instance
-resource "aws_security_group" "terraform-example-instance-security" {
-  name = "terraform-example-instance-security"
+resource "aws_security_group" "example-instance-security_1" {
+  name = "example-instance-security_1"
   description = "http/ssh connect"
 
   ingress {
@@ -33,20 +29,22 @@ resource "aws_security_group" "terraform-example-instance-security" {
   }
 
   tags = {
+
     Name = "Security instance"
   }
 }
 
 # Create an EC2 instance
 resource "aws_instance" "EC2Instance" {
-  ami			                = var.instance_ami
+  ami			          = var.instance_ami
   instance_type           = var.instance_type
-  vpc_security_group_ids  = [aws_security_group.terraform-example-instance-security.id]
+  vpc_security_group_ids  = [aws_security_group.example-instance-security_1.id]
+  iam_instance_profile   = aws_iam_instance_profile.ec2_13.name
   user_data = <<-EOF
-	      #!/bin/bash
-          aws s3api get-object --bucket testbucketformikeyatsenko --key sample.txt sample.txt
-	      EOF
-
+	         #! /bin/bash
+          aws s3api get-object --bucket testbucketformikeyatsenko21 --key sample.txt sample.txt
+	        EOF
+  key_name = "mike_ssh"
   tags = {
     Name = "terraform-example"
   }
